@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {View,Text, StyleSheet,  TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native'
+import {View,Text, StyleSheet,  TouchableOpacity, TextInput, KeyboardAvoidingView, JSON, NavigatorIOS} from 'react-native'
+import {createStackNavigator, createAppNavigator} from 'react-navigation'
 
 const BaseLink = 'http://192.168.100.3:1234/'; 
 
@@ -18,6 +19,7 @@ const links_users = {login : BaseLink + 'user/login',
 
 export default class LoginForm extends Component {
 
+
   constructor(props){
     super(props)
     this.state = {
@@ -29,68 +31,77 @@ export default class LoginForm extends Component {
     
   }
 
-  onPressLogin = () =>{
-    fetch(links_users.login,{
-      method : "POST",
-      Accept : 'application/json',
-      'Content-Type': 'application/json'
+  // onPressLogin = () =>{
+  //   fetch(links_users.login,{
+  //     method : "POST",
+  //     Accept : 'application/json',
+  //     'Content-Type': 'application/json'
+  //   })
+  //   .then((res) => res.json())
+  //   .then((resJson) => {
+  //     console.log("Merge");
+  //   })
+  // }
+  onPressLoginButton = () =>{
+    fetch(links_users.login, {
+      method : 'POST',
+      headers : {
+        Accept:'application/json','Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
     })
-    .then((res) => res.json())
-    .then((resJson) => {
-      console.log(resJson);
+  };
+
+  onPressRegisterButton = () =>{
+    fetch(links_users.signUp, {
+      method : 'POST',
+      headers:{
+        Accept:'application/json','Content-Type' : 'application/json'
+      },
+      body:JSON.stringify({
+      })
     })
   }
 
-  // onPressLogin = () => {
-  //   fetch(links_shoes.preview,{
-  //     method:'GET',
-  //     Accept : 'text/html; charset = utf-8',
-  //     'Content-Type' : 'text/html'
-  //   })
-  //   .then((response) => {
-  //     return response.text();
-  //   })
-  //   .then((responseJson) =>{
-  //     alert(responseJson);
-  //     console.log('TO DO : implement methods from backend')
-  //   })
-  //   .catch((error)=>{
-  //     alert(error);
-  //   })
-  // }
-
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style = {styles.container} >
           <TextInput
-            style ={styles.input}
-            placeholder= 'Username'
-            ref= {(el) => { this.username = el; }}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
-            returnKeyType = 'next'
-            onSubmitEditing={() => { this.password.focus(); }}
-          >
+              style ={styles.input}
+              placeholder= 'Username'
+              ref= {(el) => { this.username = el; }}
+              onChangeText={(username) => this.setState({username})}
+              value={this.state.username}
+              returnKeyType = 'next'
+              onSubmitEditing={() => { this.password.focus(); }}>
           </TextInput>
       
           <TextInput
-           style ={styles.input}
-          secureTextEntry
-          placeholder= 'Password' 
-          ref= {(el) => { this.password = el; }}
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password}
-          returnKeyType = 'done'
-          ></TextInput>
+              style ={styles.input}
+              secureTextEntry
+              placeholder= 'Password' 
+              ref= {(el) => { this.password = el; }}
+              onChangeText={(password) => this.setState({password})}
+              value={this.state.password}
+              returnKeyType = 'done'>
+          </TextInput>
             
-          <TouchableOpacity style={styles.loginButton}
-            onPress = {this.onPressLogin}>
-            <Text style = {{color:'#ecf0f1'}}>Login</Text>
+          <TouchableOpacity 
+              style={styles.loginButton}
+              onPress = {this.onPressLoginButton}>
+              <Text style = {{color:'#ecf0f1'}}>Login</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.signUpButton}
-            onPress = {this.onPressSignUp}>
-            <Text style={{color : '#ecf0f1'}}>SignUp</Text>
+          <TouchableOpacity 
+              style={styles.signUpButton}
+              onPress = {
+                () => navigate("SignUp")
+              }>
+              <Text style={{color : '#ecf0f1'}}>Register</Text>
           </TouchableOpacity>
       </View>
     )
@@ -121,3 +132,5 @@ const styles = StyleSheet.create({
       marginBottom:10
     }
 })
+
+//export default LoginForm;

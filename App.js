@@ -1,49 +1,87 @@
-import React from 'react';
-import { StyleSheet, Text, View,Image } from 'react-native';
-//import { createStackNavigator, createAppNavigator } from 'react-navigation';
-import Login from './LoginStuff/Login'
-import SignUp from './LoginStuff/SignUp'
-import MainWindow from './MainInterface/MainWindow'
+import React, { Component } from 'react'
+import { Text, View, StyleSheet, Button, TouchableOpacity, Image } from 'react-native'
+import {
+  createSwitchNavigator,
+  createAppContainer,
+  createStackNavigator,
+  createBottomTabNavigator
+} from 'react-navigation';
 
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import SignUp from "./LoginStuff/SignUp"
+import Login from "./LoginStuff/Login"
+//classes
+//we export the app class as default with the appcontainer
+//containing the navigator
 
-const MainNavigator = createStackNavigator(
-  {
-    Home: {screen: Login},
-    SignUp: {screen: SignUp},
-  },
-  {
-    defaultNavigationOptions : {
-      headerStyle:{  
-        backgroundColor:'#3498db',
-      }
-    }
+export default class App extends Component{
+  render(){
+    return <AppContainer/>;
   }
-);
+}
 
-const App = createAppContainer(MainNavigator);
+class Welcome extends Component{
+  render(){
+    return(
+      <View style = {styles.container}>
+        <Text style= { styles.title }>
+          Welcome to the Store
+        </Text>
 
+        <Button 
+        style = {{backgroundColor:"cyan", margin: 15,}}
+        title = {"Login"}
+        onPress = {() =>this.props.navigation.navigate('Login')}>
 
+        </Button >
 
-export default App;
+        <Button style = {{backgroundColor:"cyan", margin: 15,}}
+        title = {"Register"}
+        onPress = {() =>this.props.navigation.navigate('SignUp')}>
+        </Button>
 
-// export default class App extends React.Component {
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Login/>
-//       </View>  
-//       );
-//   }
-// }
+        <Image
+            style={styles.image}
 
-// const styles = StyleSheet.create({
-//   container:{
-//     alignContent:'center',
-//     backgroundColor : '#3498db',
-//     justifyContent : 'center',
-//     flex: 1,
-//     position : 'absolute',top:0,bottom:0,left:0,right:0,
-//   }
-// })
+            source={require('./assets/logo.jpg')}
+            />
+
+      </View>
+    );
+  }
+}
+
+//navigators
+
+const AppSwitchNavigator = createSwitchNavigator({
+  Welcome : { screen: Welcome},
+  Login : {screen : Login},
+  SignUp: {screen : SignUp}
+},
+) 
+
+const AppContainer = createAppContainer(AppSwitchNavigator);
+
+//styles
+
+const styles = StyleSheet.create({
+  container:{
+    alignContent:'center',
+    backgroundColor : '#3498db',
+    justifyContent : 'center',
+    flex: 1,
+    position : 'absolute',top:0,bottom:0,left:0,right:0,
+  },
+  title:{
+    marginTop: 2,
+    alignSelf: 'center',
+    fontSize: 20,
+    fontStyle: 'normal',
+  },
+  image:{
+    alignSelf:"center",
+    width:220,
+    height:220
+    
+  }
+})
 

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Image,TextInput,KeyboardAvoidingView,TouchableOpacity} from 'react-native'
-import LoginForm from './LoginForm'
-
-
+import SignUp from '../LoginStuff/SignUp'
+import {
+  createSwitchNavigator,
+  createAppContainer,
+  createStackNavigator,
+  createBottomTabNavigator
+} from 'react-navigation';
 const BaseLink = 'http://192.168.100.3:1234/'; 
 
 const links_shoes = {
@@ -20,14 +24,18 @@ const links_users = {login : BaseLink + 'user/login',
 export default class Login extends Component {
   constructor(props){
     super(props)
+    
     this.state = {
       username : '',
       password :''
     }
+   // Navigation.registerComponent('navigation.playground.Login', () => Login)
   }
 
+
+
   onPressLoginButton = () =>{
-    fetch(links_users.login, {
+    return fetch(links_users.login, {
       method : 'POST',
       headers : {
         Accept:'application/json','Content-Type' : 'application/json',
@@ -37,20 +45,23 @@ export default class Login extends Component {
         password: this.state.password,
       }),
     })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((error)=>{
+      console.error("network error");
+    });
   };
 
   onPressRegisterButton = () =>{
-    fetch(links_users.signUp, {
-      method : 'POST',
-      headers:{
-        Accept:'application/json','Content-Type' : 'application/json'
-      },
-      body:JSON.stringify({
-      })
-    })
+    
   }
 
   render() {
+
+    //const {navigate} = this.props.navigation;
+
     return (
         <View style={styles.container}>
           <View style={styles.logocontainer}>
@@ -62,7 +73,7 @@ export default class Login extends Component {
           </View>
 
           <KeyboardAvoidingView behavior='padding' enabled style={styles.formcontainer}>
-          <View style = {styles_form.container} >
+          <View >
 
                 <TextInput
                     style ={styles_form.input}
@@ -92,9 +103,8 @@ export default class Login extends Component {
 
                 <TouchableOpacity 
                     style={styles_form.signUpButton}
-                    onPress = {
-                      () => navigate("SignUp")
-                    }>
+                    onPress = {()=>this.props.navigation.navigate('SignUp')}
+                    >
                     <Text style={{color : '#ecf0f1'}}>Register</Text>
                 </TouchableOpacity>
             </View>
@@ -131,7 +141,7 @@ const styles = StyleSheet.create({
  
 const styles_form = StyleSheet.create({
   container: {
-    padding: 20,
+   
     backgroundColor:'#3498db',
   
   },

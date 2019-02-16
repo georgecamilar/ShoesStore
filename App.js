@@ -6,7 +6,7 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
-
+import MainWindow from "./MainInterface/MainWindow"
 import SignUp from "./LoginStuff/SignUp"
 import Login from "./LoginStuff/Login"
 //classes
@@ -54,6 +54,7 @@ class Welcome extends Component{
 
 const AppSwitchNavigator = createSwitchNavigator({
   Welcome : { screen: Welcome},
+  MainWindow : { screen : MainWindow },
   Login : {screen : Login},
   SignUp: {screen : SignUp}
 },

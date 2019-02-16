@@ -14,19 +14,27 @@ export default class SignUp extends React.Component {
       signinButton : "",
       returnToLogin : ""
     }
-    //Navigation.registerComponent('navigation.playground.SignUp', () => SignUp)
   }
 
   signinButton= () =>{
-    fetch(BaseLink + "/user/signup",{
-      method:'POST',
-      headers:{
-        Accept : 'application/json', 'Content-Type' : 'application/json', 
+    fetch("192.168.100.3:1234/users/sendShit", {
+      method : 'POST',
+      headers : {
+        Accept:'application/json','Content-Type' : 'application/json',
       },
-      body : JSON.stringify({
-        username : this.state,username,
-        password : this.state.password,
-      })
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+      console.registered( " Success  ");
+      this.props.navigation.navigate("MainWindow");
+    })
+    .catch((error)=>{
+      console.log("network error");
     });
 
   }
